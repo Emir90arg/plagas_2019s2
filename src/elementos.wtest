@@ -1,0 +1,80 @@
+import elementos.*
+import plagas.*
+
+test "test elementos" {
+	const hogar1 =  new Hogar(nivelMugre= 10 , confort = 40)			//bueno
+	const hogar2 =  new Hogar(nivelMugre= 5 , confort =  30)			//bueno
+	const hogar3 =  new Hogar(nivelMugre= 30 , confort = 20)			//mala
+	const perro  = new Mascota(salud = 300)								//buena
+	const gato   = new Mascota(salud=300)								//buena
+	const cotorra = new Mascota(salud=100)								//mala
+	const tortuga = new Mascota(salud=100)								//mala
+	const perico = new Mascota(salud=300)								//buena
+	const huerta1 = new Huerta(capacidadDeProduccion = 300, nivel=100)	//buena
+	const huerta2 = new Huerta(capacidadDeProduccion = 50, nivel=100)	//mala
+	const barrio1 = new Barrio(elementos=[hogar1,hogar2,perro,gato,huerta1,cotorra,tortuga])
+	const barrio2 = new Barrio(elementos=[hogar1,hogar2,hogar3,perro,cotorra,tortuga,huerta2])
+	
+	assert.that(hogar1.esBuena())
+	assert.that(hogar2.esBuena())
+	assert.notThat(hogar3.esBuena())
+	assert.that(perro.esBuena())
+	assert.that(gato.esBuena())
+	assert.notThat(cotorra.esBuena())
+	assert.notThat(tortuga.esBuena())
+	assert.that(huerta1.esBuena())
+	assert.notThat(huerta2.esBuena())
+	
+	assert.that(barrio1.esCopado())
+	assert.notThat(barrio2.esCopado())
+
+	//efectos de plagas cuarachas		
+	const plagaCucaracha1 = new Cucarachas(pesoPromedio=8,poblacion=30) //daño 15 no es transmisor
+	const plagaCucaracha2 = new Cucarachas(pesoPromedio=10,poblacion=160)//daño transmisor
+	hogar1.efectoDePlaga(plagaCucaracha1)
+	assert.equals(25,hogar1.nivelMugre())
+	huerta1.efectoDePlaga(plagaCucaracha1)
+	assert.equals(298.5,huerta1.capacidadDeProduccion())
+	perro.efectoDePlaga(plagaCucaracha1)
+	assert.equals(300,perro.salud())
+	perro.efectoDePlaga(plagaCucaracha2)
+	assert.equals(220,perro.salud())
+	
+	//efectos pulgas nivel de daño 200 y es transmisor
+	
+	const plagaPulgas1 = new Pulgas(poblacion=100)
+	const hogar4 =  new Hogar(nivelMugre= 10 , confort = 40)
+	const huerta4 = new Huerta(capacidadDeProduccion = 200, nivel=100)
+	hogar4.efectoDePlaga(plagaPulgas1)
+	assert.equals(210,hogar4.nivelMugre())
+	huerta4.efectoDePlaga(plagaPulgas1)
+	assert.equals(170,huerta4.capacidadDeProduccion())
+	gato.efectoDePlaga(plagaPulgas1)
+	assert.equals(100,gato.salud())
+
+	
+	//garrapatas nivel de danio = 50 , es transmisor verdadero
+	
+	const plagaGarrapatas1 = new Garrapatas(poblacion =100)
+	const hogar5 =  new Hogar(nivelMugre= 1 , confort = 40)
+	const huerta5 = new Huerta(capacidadDeProduccion = 500, nivel=100)
+	hogar5.efectoDePlaga(plagaGarrapatas1)
+	assert.equals(201,hogar5.nivelMugre())
+	huerta5.efectoDePlaga(plagaGarrapatas1)
+	assert.equals(470,huerta5.capacidadDeProduccion())
+	perico.efectoDePlaga(plagaGarrapatas1)
+	assert.equals(100,perico.salud())
+	//mosquitos nivel de danio=  , no es transmisor
+	const plagaMosquitos1 = new Mosquitos(poblacion=200)	
+	const hogar6 =  new Hogar(nivelMugre= 20 , confort = 60)
+	const huerta6 = new Huerta(capacidadDeProduccion = 350, nivel=100)
+	hogar6.efectoDePlaga(plagaMosquitos1)
+	assert.equals(220,hogar6.nivelMugre())
+	huerta6.efectoDePlaga(plagaMosquitos1)
+	assert.equals(330,huerta6.capacidadDeProduccion())
+	tortuga.efectoDePlaga(plagaMosquitos1)
+	assert.equals(100,tortuga.salud())
+
+
+
+}	

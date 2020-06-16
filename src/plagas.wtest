@@ -1,0 +1,46 @@
+import plagas.*
+import elementosConEfectoSobrePlagas.*
+
+test "plagas" {
+	const plagaCucaracha1 = new Cucarachas(pesoPromedio=8,poblacion=30)
+	const plagaCucaracha2 = new Cucarachas(pesoPromedio=10,poblacion=160)
+	const plagaPulgas1 = new Pulgas(poblacion=100)
+	const plagaGarrapatas1 = new Garrapatas(poblacion =100)
+	const plagaMosquitos1 = new Mosquitos(poblacion=200)
+	const plagaMosquitos2 = new Mosquitos(poblacion=300)
+	
+	assert.equals(15,plagaCucaracha1.nivelDeDanio())
+	assert.notThat(plagaCucaracha1.esTransmisor())
+	assert.equals(80,plagaCucaracha2.nivelDeDanio())
+	assert.that(plagaCucaracha2.esTransmisor())
+	assert.equals(200,plagaPulgas1.nivelDeDanio())
+	assert.that(plagaPulgas1.esTransmisor())
+	assert.equals(200,plagaGarrapatas1.nivelDeDanio())
+	assert.that(plagaGarrapatas1.esTransmisor())
+	assert.equals(200,plagaMosquitos1.nivelDeDanio())
+	assert.notThat(plagaMosquitos1.esTransmisor())
+	assert.equals(300,plagaMosquitos2.nivelDeDanio())
+	assert.that(plagaMosquitos2.esTransmisor())
+	
+	//efecto sobre plagas 
+	const hogar1 =  new Hogar(nivelMugre= 10 , confort = 40)
+	hogar1.efectoDePlaga(plagaCucaracha1)
+	assert.equals(10,plagaCucaracha1.pesoPromedio())
+	assert.equals(33,plagaCucaracha1.poblacion())
+	
+	hogar1.efectoDePlaga(plagaCucaracha2)
+	assert.equals(12,plagaCucaracha2.pesoPromedio())
+	assert.equals(176,plagaCucaracha2.poblacion())
+	
+	hogar1.efectoDePlaga(plagaPulgas1)
+	assert.equals(110,plagaPulgas1.poblacion())
+	
+	hogar1.efectoDePlaga(plagaGarrapatas1)
+	assert.equals(120,plagaGarrapatas1.poblacion())
+	
+	hogar1.efectoDePlaga(plagaMosquitos1)
+	assert.equals(220,plagaMosquitos1.poblacion())
+	
+	hogar1.efectoDePlaga(plagaMosquitos2)
+	assert.equals(330,plagaMosquitos2.poblacion())
+}
